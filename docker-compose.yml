@@ -41,7 +41,9 @@ services:
       - ./shared:/srv/shared:ro
       - caddy_data:/data
       - caddy_config:/config
+      - aiostreams_data:/app/data 
 
 volumes:
   caddy_data:
   caddy_config:
+  aiostreams_data:
