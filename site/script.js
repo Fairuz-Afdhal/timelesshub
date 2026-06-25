@@ -196,3 +196,126 @@ if (document.readyState === "loading") {
 } else {
   initBoarding();
 }
+
+/* ---------- Easter egg: hidden station announcement ---------- */
+const PA_MESSAGES = [
+  "Passenger Fairuz is now boarding the automation express.",
+  "The 13:37 service to COMET is departing shortly. Mind the gap.",
+  "Lost property: one civil engineering degree, now repurposed for ops.",
+  "All systems ON TIME. Thank you for choosing TimelessHub.",
+  "Reminder: this station is self-hosted and runs on coffee.",
+];
+
+function initAnnouncement() {
+  const pa = document.getElementById("pa");
+  const paText = document.getElementById("paText");
+  const mark = document.querySelector(".topbar__mark");
+  if (!pa || !paText || !mark) return;
+
+  let count = 0;
+  let resetTimer = null;
+  let hideTimer = null;
+  let lastIndex = -1;
+
+  function show() {
+    let i = Math.floor(Math.random() * PA_MESSAGES.length);
+    if (i === lastIndex) i = (i + 1) % PA_MESSAGES.length;
+    lastIndex = i;
+    paText.textContent = PA_MESSAGES[i];
+    pa.classList.add("is-visible");
+    pa.setAttribute("aria-hidden", "false");
+    clearTimeout(hideTimer);
+    hideTimer = setTimeout(hide, 6000);
+  }
+
+  function hide() {
+    pa.classList.remove("is-visible");
+    pa.setAttribute("aria-hidden", "true");
+  }
+
+  mark.style.cursor = "pointer";
+  mark.addEventListener("click", (e) => {
+    e.preventDefault();
+    count++;
+    clearTimeout(resetTimer);
+    resetTimer = setTimeout(() => { count = 0; }, 1500);
+    if (count >= 5) {
+      count = 0;
+      show();
+    }
+  });
+
+  pa.addEventListener("click", hide);
+}
+
+/* ---------- Easter egg: idle board shuffle ---------- */
+function initIdleShuffle() {
+  if (reduceMotion) return;
+
+  function glitchCell(cell, flips) {
+    const original = cell.textContent;
+    let n = 0;
+    cell.classList.add("is-cycling");
+    const timer = setInterval(() => {
+      n++;
+      if (n >= flips) {
+        clearInterval(timer);
+        cell.textContent = original;
+        cell.classList.remove("is-cycling");
+        cell.classList.add("is-locked");
+        setTimeout(() => cell.classList.remove("is-locked"), 240);
+      } else {
+        cell.textContent = CHARSET[Math.floor(Math.random() * (CHARSET.length - 1))];
+      }
+    }, 55);
+  }
+
+  function glitchOne() {
+    // Reshuffle a whole field (e.g. a service or destination) so it's clearly visible.
+    const fields = Array.from(document.querySelectorAll(".board .flap")).filter(
+      (f) => f.querySelector(".flap-cell:not(.flap-cell--space)")
+    );
+    if (!fields.length) return;
+    const field = fields[Math.floor(Math.random() * fields.length)];
+    const cells = Array.from(
+      field.querySelectorAll(".flap-cell:not(.flap-cell--space)")
+    );
+    cells.forEach((cell, i) => {
+      const flips = 5 + Math.floor(Math.random() * 4);
+      setTimeout(() => glitchCell(cell, flips), i * 60);
+    });
+  }
+
+  let idleTimer = null;
+  let shuffleInterval = null;
+
+  function goIdle() {
+    glitchOne();
+    shuffleInterval = setInterval(glitchOne, 5000);
+  }
+
+  function reset() {
+    clearTimeout(idleTimer);
+    if (shuffleInterval) {
+      clearInterval(shuffleInterval);
+      shuffleInterval = null;
+    }
+    idleTimer = setTimeout(goIdle, 15000);
+  }
+
+  ["mousemove", "mousedown", "keydown", "scroll", "touchstart", "wheel"].forEach((ev) => {
+    window.addEventListener(ev, reset, { passive: true });
+  });
+  reset();
+}
+
+function initEasterEggs() {
+  initAnnouncement();
+  initIdleShuffle();
+}
+
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", initEasterEggs);
+} else {
+  initEasterEggs();
+}

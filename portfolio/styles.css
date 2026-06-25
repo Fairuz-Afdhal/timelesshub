@@ -462,6 +462,49 @@ a { color: inherit; text-decoration: none; }
 .reveal { opacity: 0; transform: translateY(22px); transition: opacity 0.6s ease, transform 0.6s ease; }
 .reveal.is-visible { opacity: 1; transform: none; }
 
+/* ---------- Station announcement (easter egg) ---------- */
+.pa {
+  position: fixed;
+  left: 50%;
+  top: 18px;
+  z-index: 1100;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  max-width: min(580px, calc(100vw - 32px));
+  padding: 14px 18px;
+  font-family: var(--mono);
+  background: rgba(13, 13, 16, 0.96);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 194, 75, 0.42);
+  border-radius: 12px;
+  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.5), 0 0 26px rgba(255, 194, 75, 0.12);
+  opacity: 0;
+  visibility: hidden;
+  transform: translate(-50%, -130%);
+  transition: transform 0.45s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.35s ease, visibility 0.35s;
+  cursor: pointer;
+}
+
+.pa.is-visible {
+  opacity: 1;
+  visibility: visible;
+  transform: translate(-50%, 0);
+}
+
+.pa__tag {
+  font-size: 0.64rem;
+  letter-spacing: 0.16em;
+  color: var(--amber);
+  white-space: nowrap;
+  text-shadow: 0 0 12px rgba(255, 194, 75, 0.4);
+}
+
+.pa__text {
+  font-size: 0.84rem;
+  color: var(--text);
+}
+
 /* ---------- Responsive ---------- */
 @media (max-width: 760px) {
   .topbar__nav { gap: 14px; }

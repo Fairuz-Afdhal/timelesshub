@@ -119,9 +119,61 @@ function initReveal() {
   els.forEach((el) => observer.observe(el));
 }
 
+/* ---------- Easter egg: hidden station announcement ---------- */
+const PA_MESSAGES = [
+  "Passenger Fairuz is now boarding the automation express.",
+  "Now arriving: a civil engineer who took a hard left into ops.",
+  "Lost property: one civil engineering degree, now repurposed for ops.",
+  "All systems ON TIME. Thank you for visiting the passenger terminal.",
+  "Reminder: this portfolio is self-hosted and runs on coffee.",
+];
+
+function initAnnouncement() {
+  const pa = document.getElementById("pa");
+  const paText = document.getElementById("paText");
+  const mark = document.querySelector(".topbar__mark");
+  if (!pa || !paText || !mark) return;
+
+  let count = 0;
+  let resetTimer = null;
+  let hideTimer = null;
+  let lastIndex = -1;
+
+  function show() {
+    let i = Math.floor(Math.random() * PA_MESSAGES.length);
+    if (i === lastIndex) i = (i + 1) % PA_MESSAGES.length;
+    lastIndex = i;
+    paText.textContent = PA_MESSAGES[i];
+    pa.classList.add("is-visible");
+    pa.setAttribute("aria-hidden", "false");
+    clearTimeout(hideTimer);
+    hideTimer = setTimeout(hide, 6000);
+  }
+
+  function hide() {
+    pa.classList.remove("is-visible");
+    pa.setAttribute("aria-hidden", "true");
+  }
+
+  mark.style.cursor = "pointer";
+  mark.addEventListener("click", (e) => {
+    e.preventDefault();
+    count++;
+    clearTimeout(resetTimer);
+    resetTimer = setTimeout(() => { count = 0; }, 1500);
+    if (count >= 5) {
+      count = 0;
+      show();
+    }
+  });
+
+  pa.addEventListener("click", hide);
+}
+
 function init() {
   initReveal();
   initFlaps();
+  initAnnouncement();
 }
 
 if (document.readyState === "loading") {
