@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TimelessHub — Fairuz</title>
+  <meta name="description" content="The personal hub of Fairuz — a departures board of self-hosted tools, experiments, and projects." />
+
+  <meta property="og:title" content="TimelessHub — Fairuz" />
+  <meta property="og:description" content="A departures board of self-hosted tools and projects by Fairuz." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://timelesshub.my.id/" />
+  <meta property="og:image" content="https://timelesshub.my.id/og.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="TimelessHub — Fairuz" />
+  <meta name="twitter:description" content="A departures board of self-hosted tools and projects by Fairuz." />
+  <meta name="twitter:image" content="https://timelesshub.my.id/og.png" />
+
+  <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+  <link rel="icon" href="favicon-32.png" sizes="32x32" type="image/png" />
+  <link rel="apple-touch-icon" href="apple-touch-icon.png" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="vignette" aria-hidden="true"></div>
+  <div class="scanlines" aria-hidden="true"></div>
+
+  <!-- Station header -->
+  <header class="topbar">
+    <div class="topbar__brand">
+      <span class="topbar__mark">◆</span>
+      <span class="topbar__name">TIMELESSHUB</span>
+      <span class="topbar__sep">/</span>
+      <span class="topbar__op">FAIRUZ</span>
+    </div>
+    <div class="topbar__clock">
+      <span class="clock__time" id="clock">--:--:--</span>
+      <span class="clock__date" id="date">— — —</span>
+    </div>
+  </header>
+
+  <main class="station">
+    <!-- Board heading -->
+    <section class="marquee">
+      <h1 class="marquee__title flap" data-flap="DEPARTURES" data-flap-delay="0"></h1>
+      <p class="marquee__sub">
+        The personal hub of <strong>Fairuz</strong> — self-hosted tools,
+        experiments &amp; projects, now boarding.
+      </p>
+    </section>
+
+    <!-- Departures board -->
+    <section class="board" aria-label="Projects departures board">
+      <div class="board__row board__row--head" aria-hidden="true">
+        <span class="col col--time">TIME</span>
+        <span class="col col--service">SERVICE</span>
+        <span class="col col--dest">DESTINATION</span>
+        <span class="col col--gate">GATE</span>
+        <span class="col col--status">STATUS</span>
+      </div>
+
+      <a class="board__row" href="https://aio.timelesshub.my.id/" target="_blank" rel="noopener"
+         aria-label="AIOStreams — open aio.timelesshub.my.id">
+        <span class="col col--time flap" data-flap="09:41"></span>
+        <span class="col col--service flap" data-flap="AIOSTREAMS"></span>
+        <span class="col col--dest flap" data-flap="AIO.TIMELESSHUB.MY.ID"></span>
+        <span class="col col--gate flap" data-flap="A1"></span>
+        <span class="col col--status status--amber flap" data-flap="CHECKING" data-check="https://aio.timelesshub.my.id/"></span>
+      </a>
+
+      <a class="board__row" href="https://comet.timelesshub.my.id/" target="_blank" rel="noopener"
+         aria-label="Comet — open comet.timelesshub.my.id">
+        <span class="col col--time flap" data-flap="12:00"></span>
+        <span class="col col--service flap" data-flap="COMET"></span>
+        <span class="col col--dest flap" data-flap="COMET.TIMELESSHUB.MY.ID"></span>
+        <span class="col col--gate flap" data-flap="B2"></span>
+        <span class="col col--status status--amber flap" data-flap="CHECKING" data-check="https://comet.timelesshub.my.id/"></span>
+      </a>
+
+      <a class="board__row" href="https://fairuz.timelesshub.my.id/" target="_blank" rel="noopener"
+         aria-label="Portfolio — fairuz.timelesshub.my.id, status scheduled">
+        <span class="col col--time flap" data-flap="18:30"></span>
+        <span class="col col--service flap" data-flap="PORTFOLIO"></span>
+        <span class="col col--dest flap" data-flap="FAIRUZ.TIMELESSHUB.MY.ID"></span>
+        <span class="col col--gate flap" data-flap="C3"></span>
+        <span class="col col--status status--amber flap" data-flap="CHECKING" data-check="https://fairuz.timelesshub.my.id/"></span>
+      </a>
+    </section>
+
+    <p class="board-meta">
+      LAST CHECKED <span id="lastChecked">--:--:--</span>
+      <span class="dotsep">•</span> AUTO-REFRESH 60S
+    </p>
+
+    <!-- Info + contact panels -->
+    <section class="panels">
+      <article class="panel">
+        <div class="panel__tag">PASSENGER INFORMATION</div>
+        <p class="panel__lead">Hi, I'm Fairuz.</p>
+        <p>
+          TimelessHub is my personal corner of the internet — a station where the
+          things I build, host and tinker with all depart from. Right now that's
+          mostly streaming tooling, with a full portfolio inbound.
+        </p>
+        <p class="panel__muted">
+          Everything here is self-hosted and maintained by me. If a service shows
+          DELAYED, I'm probably mid-upgrade.
+        </p>
+      </article>
+
+      <article class="panel panel--contact">
+        <div class="panel__tag">CONTACT DESK</div>
+        <ul class="desk">
+          <li>
+            <span class="desk__k">GITHUB</span>
+            <a class="desk__v" href="https://github.com/Fairuz-Afdhal" target="_blank" rel="noopener">→ github.com/Fairuz-Afdhal</a>
+          </li>
+          <li>
+            <span class="desk__k">EMAIL</span>
+            <a class="desk__v" href="mailto:fairuzzafdhal@gmail.com">→ fairuzzafdhal@gmail.com</a>
+          </li>
+          <li>
+            <span class="desk__k">DISCORD</span>
+            <a class="desk__v" href="https://discord.gg/Sv2WDNvbVU" target="_blank" rel="noopener">→ discord.gg/Sv2WDNvbVU</a>
+          </li>
+        </ul>
+      </article>
+    </section>
+  </main>
+
+  <footer class="station-foot">
+    <span>TIMELESSHUB STATION</span>
+    <span class="dotsep">•</span>
+    <span>OPERATED BY FAIRUZ</span>
+    <span class="dotsep">•</span>
+    <span>© <span id="year"></span></span>
+  </footer>
+
+  <!-- Boarding transition overlay -->
+  <div class="boarding" id="boarding" aria-hidden="true">
+    <div class="boarding__rails" aria-hidden="true"></div>
+    <div class="boarding__panel">
+      <p class="boarding__status"><span class="boarding__dot"></span> NOW BOARDING</p>
+      <div class="boarding__service flap" id="boardingService"></div>
+      <p class="boarding__dest" id="boardingDest"></p>
+      <div class="boarding__bar"><span></span></div>
+      <p class="boarding__hint">DEPARTING…</p>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

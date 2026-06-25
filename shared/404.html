@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Departure Cancelled — TimelessHub</title>
+  <meta name="description" content="404 — this departure doesn't exist." />
+  <meta name="robots" content="noindex" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700;800&family=Inter:wght@400;500&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --bg: #08080a;
+      --board: #0d0d10;
+      --board-line: rgba(255, 255, 255, 0.06);
+      --cell-top: #26262d;
+      --cell-bottom: #15151a;
+      --cell-seam: rgba(0, 0, 0, 0.55);
+      --amber: #ffc24b;
+      --amber-dim: #6f6346;
+      --red: #ff5d5d;
+      --text: #e9e9ee;
+      --muted: #82828f;
+      --mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+      --sans: "Inter", system-ui, sans-serif;
+      --maxw: 1080px;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: var(--mono);
+      background: radial-gradient(1100px 700px at 50% -15%, #14141b 0%, var(--bg) 60%);
+      color: var(--text);
+      min-height: 100vh;
+      line-height: 1.5;
+      position: relative;
+      overflow-x: hidden;
+    }
+    a { color: inherit; text-decoration: none; }
+
+    .vignette {
+      position: fixed; inset: 0; pointer-events: none; z-index: 1;
+      background: radial-gradient(120% 90% at 50% 35%, transparent 55%, rgba(0,0,0,0.65) 100%);
+    }
+    .scanlines {
+      position: fixed; inset: 0; pointer-events: none; z-index: 2; opacity: 0.35;
+      background: repeating-linear-gradient(to bottom, rgba(255,255,255,0.025) 0px, rgba(255,255,255,0.025) 1px, transparent 2px, transparent 4px);
+      mix-blend-mode: overlay;
+    }
+
+    .topbar {
+      position: relative; z-index: 3;
+      max-width: var(--maxw); margin: 0 auto;
+      padding: 22px 24px;
+      display: flex; align-items: center; justify-content: space-between; gap: 16px;
+      border-bottom: 1px solid var(--board-line);
+    }
+    .topbar__brand { display: flex; align-items: center; gap: 10px; font-weight: 800; letter-spacing: 0.14em; font-size: 0.98rem; }
+    .topbar__mark { color: var(--amber); }
+    .clock__time { color: var(--amber); font-weight: 700; font-size: 1.1rem; letter-spacing: 0.08em; font-variant-numeric: tabular-nums; text-shadow: 0 0 14px rgba(255,194,75,0.35); }
+
+    .station { position: relative; z-index: 3; max-width: var(--maxw); margin: 0 auto; padding: 0 24px 40px; }
+    .marquee { padding: 56px 0 36px; text-align: center; }
+    .marquee__title { display: inline-flex; flex-wrap: wrap; justify-content: center; gap: 6px; font-size: clamp(2.1rem, 7vw, 4rem); font-weight: 800; letter-spacing: 0.04em; }
+    .marquee__sub { margin: 22px auto 0; max-width: 560px; font-family: var(--sans); color: var(--muted); font-size: 1.02rem; }
+    .marquee__sub strong { color: var(--text); }
+
+    .flap { display: inline-flex; gap: 3px; }
+    .flap-cell {
+      --w: 0.74em; position: relative; display: inline-flex; align-items: center; justify-content: center;
+      min-width: var(--w); padding: 0.16em 0.05em;
+      background: linear-gradient(to bottom, var(--cell-top) 0%, var(--cell-top) 49.5%, var(--cell-bottom) 50.5%, var(--cell-bottom) 100%);
+      border-radius: 4px;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.06), inset 0 -1px 0 rgba(0,0,0,0.5), 0 1px 2px rgba(0,0,0,0.4);
+      color: var(--amber); font-weight: 700; line-height: 1; overflow: hidden;
+    }
+    .flap-cell::after { content: ""; position: absolute; left: 0; right: 0; top: 50%; height: 1px; transform: translateY(-50%); background: var(--cell-seam); box-shadow: 0 1px 0 rgba(255,255,255,0.04); }
+    .flap-cell--space { background: transparent; box-shadow: none; min-width: 0.34em; }
+    .flap-cell--space::after { display: none; }
+    .flap-cell.is-cycling { color: #d8c79a; }
+    .flap-cell.is-locked { animation: flapPop 0.22s ease; }
+    @keyframes flapPop { 0% { transform: scaleY(0.55); filter: brightness(1.6); } 60% { transform: scaleY(1.05); } 100% { transform: scaleY(1); filter: brightness(1); } }
+
+    .board { border: 1px solid var(--board-line); border-radius: 14px; background: linear-gradient(180deg, #101015, var(--board)); padding: 8px; box-shadow: 0 30px 80px rgba(0,0,0,0.55), inset 0 0 0 1px rgba(255,255,255,0.02); overflow: hidden; }
+    .board__row { display: grid; grid-template-columns: 78px 1.15fr 1.7fr 64px 132px; gap: 14px; align-items: center; padding: 16px; border-radius: 8px; }
+    .board__row--head { font-size: 0.7rem; letter-spacing: 0.22em; color: var(--amber-dim); padding-top: 10px; padding-bottom: 14px; }
+    .board__row + .board__row { border-top: 1px solid var(--board-line); }
+    .col { font-size: 0.94rem; }
+    .col--time { color: var(--muted); }
+    .col--service { font-size: 1.02rem; }
+    .col--dest .flap-cell { font-size: 0.78rem; }
+    .status--red .flap-cell { color: var(--red); }
+    .is-blinking .flap-cell { animation: statusBlink 1.15s steps(1, end) infinite; }
+    @keyframes statusBlink { 0%, 55% { opacity: 1; text-shadow: 0 0 12px currentColor; } 56%, 100% { opacity: 0.22; text-shadow: none; } }
+
+    .notice { text-align: center; margin-top: 30px; }
+    .notice p { font-family: var(--sans); color: var(--muted); max-width: 520px; margin: 0 auto; }
+    .backlink { display: inline-flex; align-items: center; gap: 10px; margin-top: 26px; padding: 13px 24px; border: 1px solid var(--board-line); border-radius: 10px; background: linear-gradient(180deg, #14141a, var(--board)); color: var(--amber); font-weight: 700; letter-spacing: 0.08em; transition: background 0.2s ease, text-shadow 0.2s ease, transform 0.2s ease; }
+    .backlink:hover { background: rgba(255,194,75,0.07); text-shadow: 0 0 14px rgba(255,194,75,0.45); transform: translateY(-2px); }
+
+    .station-foot { position: relative; z-index: 3; max-width: var(--maxw); margin: 30px auto 0; padding: 22px 24px 40px; display: flex; flex-wrap: wrap; gap: 10px; align-items: center; border-top: 1px solid var(--board-line); color: var(--muted); font-size: 0.72rem; letter-spacing: 0.16em; }
+    .dotsep { color: var(--amber-dim); }
+
+    @media (max-width: 720px) {
+      .board__row { grid-template-columns: 1fr auto; grid-template-areas: "service status" "dest dest"; gap: 10px 14px; }
+      .board__row--head { display: none; }
+      .col--time, .col--gate { display: none; }
+      .col--service { grid-area: service; }
+      .col--dest { grid-area: dest; opacity: 0.85; }
+      .col--status { grid-area: status; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .flap-cell.is-locked { animation: none; }
+      .is-blinking .flap-cell { animation: none; opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+  <div class="vignette" aria-hidden="true"></div>
+  <div class="scanlines" aria-hidden="true"></div>
+
+  <header class="topbar">
+    <a class="topbar__brand" href="https://timelesshub.my.id/">
+      <span class="topbar__mark">◆</span>
+      <span>TIMELESSHUB</span>
+    </a>
+    <div class="topbar__clock">
+      <span class="clock__time" id="clock">--:--:--</span>
+    </div>
+  </header>
+
+  <main class="station">
+    <section class="marquee">
+      <h1 class="marquee__title flap" data-flap="404" data-flap-delay="0"></h1>
+      <p class="marquee__sub">
+        This departure doesn't exist. It was <strong>cancelled</strong> or never
+        scheduled.
+      </p>
+    </section>
+
+    <section class="board" aria-label="Cancelled departure">
+      <div class="board__row board__row--head" aria-hidden="true">
+        <span class="col col--time">TIME</span>
+        <span class="col col--service">SERVICE</span>
+        <span class="col col--dest">DESTINATION</span>
+        <span class="col col--gate">GATE</span>
+        <span class="col col--status">STATUS</span>
+      </div>
+      <div class="board__row">
+        <span class="col col--time flap" data-flap="--:--"></span>
+        <span class="col col--service flap" data-flap="THIS PAGE"></span>
+        <span class="col col--dest flap" id="reqpath" data-flap="UNKNOWN"></span>
+        <span class="col col--gate flap" data-flap="--"></span>
+        <span class="col col--status status--red flap" data-flap="CANCELLED" data-blink></span>
+      </div>
+    </section>
+
+    <section class="notice">
+      <p>
+        Check the address, or head back to the main board to catch a service
+        that's actually running.
+      </p>
+      <a class="backlink" href="https://timelesshub.my.id/">← RETURN TO STATION</a>
+    </section>
+  </main>
+
+  <footer class="station-foot">
+    <span>TIMELESSHUB STATION</span>
+    <span class="dotsep">•</span>
+    <span>OPERATED BY FAIRUZ</span>
+    <span class="dotsep">•</span>
+    <span>© <span id="year"></span></span>
+  </footer>
+
+  <script>
+    (function () {
+      var CHARSET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.:-/& ";
+      var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+      var yearEl = document.getElementById("year");
+      if (yearEl) yearEl.textContent = new Date().getFullYear();
+
+      function pad(n) { return String(n).padStart(2, "0"); }
+      var clockEl = document.getElementById("clock");
+      function tick() {
+        if (!clockEl) return;
+        var n = new Date();
+        clockEl.textContent = pad(n.getHours()) + ":" + pad(n.getMinutes()) + ":" + pad(n.getSeconds());
+      }
+      tick();
+      setInterval(tick, 1000);
+
+      // Show the attempted path in the DESTINATION cell.
+      var reqEl = document.getElementById("reqpath");
+      if (reqEl) {
+        var path = (location.pathname + location.search) || "/";
+        path = path.replace(/^\//, "").toUpperCase();
+        if (!path) path = "UNKNOWN";
+        if (path.length > 28) path = path.slice(0, 27) + "…";
+        reqEl.setAttribute("data-flap", path);
+      }
+
+      function buildCells(el) {
+        var target = el.getAttribute("data-flap") || "";
+        el.setAttribute("aria-label", target);
+        el.textContent = "";
+        var cells = [];
+        for (var i = 0; i < target.length; i++) {
+          var ch = target[i];
+          var cell = document.createElement("span");
+          cell.setAttribute("aria-hidden", "true");
+          if (ch === " ") {
+            cell.className = "flap-cell flap-cell--space";
+            cell.textContent = " ";
+            el.appendChild(cell);
+            continue;
+          }
+          cell.className = "flap-cell";
+          cell.textContent = reduceMotion ? ch : CHARSET[0];
+          el.appendChild(cell);
+          cells.push({ node: cell, final: ch.toUpperCase() });
+        }
+        return cells;
+      }
+
+      function animateCell(cell, baseDelay) {
+        var target = cell.final;
+        var flips = 6 + Math.floor(Math.random() * 8);
+        var count = 0;
+        setTimeout(function () {
+          cell.node.classList.add("is-cycling");
+          var timer = setInterval(function () {
+            count++;
+            if (count >= flips) {
+              clearInterval(timer);
+              cell.node.textContent = target;
+              cell.node.classList.remove("is-cycling");
+              cell.node.classList.add("is-locked");
+              setTimeout(function () { cell.node.classList.remove("is-locked"); }, 240);
+            } else {
+              cell.node.textContent = CHARSET[Math.floor(Math.random() * (CHARSET.length - 1))];
+            }
+          }, 45);
+        }, baseDelay);
+      }
+
+      function flap(el, startBase) {
+        var cells = buildCells(el);
+        if (reduceMotion) return;
+        cells.forEach(function (cell, i) {
+          animateCell(cell, startBase + i * 32 + Math.random() * 30);
+        });
+      }
+
+      function run() {
+        var els = Array.prototype.slice.call(document.querySelectorAll(".flap"));
+        els.forEach(function (el, idx) {
+          var extra = parseInt(el.getAttribute("data-flap-delay") || "", 10);
+          var startBase = isNaN(extra) ? idx * 90 : extra;
+          flap(el, startBase);
+        });
+        var blinkers = document.querySelectorAll("[data-blink]");
+        if (reduceMotion) {
+          blinkers.forEach(function (el) { el.classList.add("is-blinking"); });
+        } else {
+          setTimeout(function () {
+            blinkers.forEach(function (el) { el.classList.add("is-blinking"); });
+          }, 2600);
+        }
+      }
+
+      if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", run);
+      } else {
+        run();
+      }
+    })();
+  </script>
+</body>
+</html>

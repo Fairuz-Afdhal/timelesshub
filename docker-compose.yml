@@ -1,0 +1,47 @@
+services:
+  comet:
+    image: g0ldyy/comet:latest
+    container_name: comet
+    restart: unless-stopped
+    environment:
+      - FASTAPI_HOST=0.0.0.0
+      - FASTAPI_PORT=8000
+      # Torrentio
+      - SCRAPE_TORRENTIO=live
+      - TORRENTIO_URL=https://torrentio.strem.fun
+      # MediaFusion
+      - SCRAPE_MEDIAFUSION=live
+      - MEDIAFUSION_URL=https://mediafusion.elfhosted.com
+      - MEDIAFUSION_LIVE_SEARCH=True
+      # Disable TorBox inside Comet to prevent the 429 error
+      - SCRAPE_TORBOX=False
+
+  aiostreams:
+    image: ghcr.io/viren070/aiostreams:latest
+    container_name: aiostreams
+    restart: unless-stopped
+    environment:
+      - SECRET_KEY=${AIOSTREAMS_SECRET_KEY}
+      - BASE_URL=https://aio.timelesshub.my.id
+
+  caddy:
+    image: caddy:latest
+    container_name: caddy
+    restart: unless-stopped
+    dns:
+      - 1.1.1.1
+      - 8.8.8.8
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile
+      - ./site:/srv/timelesshub:ro
+      - ./portfolio:/srv/fairuz:ro
+      - ./shared:/srv/shared:ro
+      - caddy_data:/data
+      - caddy_config:/config
+
+volumes:
+  caddy_data:
+  caddy_config:
