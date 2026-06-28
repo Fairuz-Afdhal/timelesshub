@@ -4,10 +4,10 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>TimelessHub — Fairuz</title>
-  <meta name="description" content="The personal hub of Fairuz — a departures board of self-hosted tools, experiments, and projects." />
+  <meta name="description" content="The personal hub of Fairuz — grab a boarding pass, rip the stub, and depart to self-hosted tools and projects." />
 
   <meta property="og:title" content="TimelessHub — Fairuz" />
-  <meta property="og:description" content="A departures board of self-hosted tools and projects by Fairuz." />
+  <meta property="og:description" content="Boarding passes for Fairuz's self-hosted tools — rip a stub to depart." />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://timelesshub.my.id/" />
   <meta property="og:image" content="https://timelesshub.my.id/og.png" />
@@ -15,7 +15,7 @@
   <meta property="og:image:height" content="630" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="TimelessHub — Fairuz" />
-  <meta name="twitter:description" content="A departures board of self-hosted tools and projects by Fairuz." />
+  <meta name="twitter:description" content="Boarding passes for Fairuz's self-hosted tools — rip a stub to depart." />
   <meta name="twitter:image" content="https://timelesshub.my.id/og.png" />
 
   <link rel="icon" href="favicon.svg" type="image/svg+xml" />
@@ -25,143 +25,169 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
-
-  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="ticket.css" />
 </head>
 <body>
-  <div class="vignette" aria-hidden="true"></div>
-  <div class="scanlines" aria-hidden="true"></div>
-
-  <!-- Station header -->
-  <header class="topbar">
-    <div class="topbar__brand">
-      <span class="topbar__mark">◆</span>
-      <span class="topbar__name">TIMELESSHUB</span>
-      <span class="topbar__sep">/</span>
-      <span class="topbar__op">FAIRUZ</span>
-    </div>
-    <div class="topbar__clock">
-      <span class="clock__time" id="clock">--:--:--</span>
-      <span class="clock__date" id="date">— — —</span>
-    </div>
-  </header>
-
-  <main class="station">
-    <!-- Board heading -->
-    <section class="marquee">
-      <h1 class="marquee__title flap" data-flap="DEPARTURES" data-flap-delay="0"></h1>
-      <p class="marquee__sub">
-        The personal hub of <strong>Fairuz</strong> — self-hosted tools,
-        experiments &amp; projects, now boarding.
-      </p>
-    </section>
-
-    <!-- Departures board -->
-    <section class="board" aria-label="Projects departures board">
-      <div class="board__row board__row--head" aria-hidden="true">
-        <span class="col col--time">TIME</span>
-        <span class="col col--service">SERVICE</span>
-        <span class="col col--dest">DESTINATION</span>
-        <span class="col col--gate">GATE</span>
-        <span class="col col--status">STATUS</span>
+  <div class="stage">
+    <div class="bookhead">
+      <div class="brandrow">
+        <button class="brand" id="logo" type="button" aria-label="TimelessHub Airways — tap three times for a first-class upgrade">
+          <span class="mk">◆</span> TIMELESSHUB AIRWAYS
+        </button>
+        <div class="brandrow__r">
+          <button class="snd" id="sndToggle" type="button" aria-pressed="true" title="Sound on — click to mute">♪</button>
+          <span class="tag" id="classTag">BOARDING PASS</span>
+        </div>
       </div>
+      <div class="pax"><div class="pax__k">PASSENGER</div><div class="pax__v">FAIRUZ AFDHAL</div></div>
+      <p class="bookhead__hint">◆ THREE DESTINATIONS · NO LAYOVERS · GET READY FOR DEPARTURE ✈</p>
+      <button class="fc-hint" id="fcHint" type="button">✦ psst — tap the ◆ three times</button>
+    </div>
 
-      <a class="board__row" href="https://aio.timelesshub.my.id/" target="_blank" rel="noopener"
-         aria-label="AIOStreams — open aio.timelesshub.my.id">
-        <span class="col col--time flap" data-flap="09:41"></span>
-        <span class="col col--service flap" data-flap="AIOSTREAMS"></span>
-        <span class="col col--dest flap" data-flap="AIO.TIMELESSHUB.MY.ID"></span>
-        <span class="col col--gate flap" data-flap="A1"></span>
-        <span class="col col--status status--amber flap" data-flap="CHECKING" data-check="https://aio.timelesshub.my.id/"></span>
-      </a>
+    <div class="deck" id="deck">
 
-      <a class="board__row" href="https://comet.timelesshub.my.id/" target="_blank" rel="noopener"
-         aria-label="Comet — open comet.timelesshub.my.id">
-        <span class="col col--time flap" data-flap="13:37"></span>
-        <span class="col col--service flap" data-flap="COMET"></span>
-        <span class="col col--dest flap" data-flap="COMET.TIMELESSHUB.MY.ID"></span>
-        <span class="col col--gate flap" data-flap="B2"></span>
-        <span class="col col--status status--amber flap" data-flap="CHECKING" data-check="https://comet.timelesshub.my.id/"></span>
-      </a>
-
-      <a class="board__row" href="https://fairuz.timelesshub.my.id/" target="_blank" rel="noopener"
-         aria-label="Portfolio — fairuz.timelesshub.my.id, status scheduled">
-        <span class="col col--time flap" data-flap="03:39"></span>
-        <span class="col col--service flap" data-flap="PORTFOLIO"></span>
-        <span class="col col--dest flap" data-flap="FAIRUZ.TIMELESSHUB.MY.ID"></span>
-        <span class="col col--gate flap" data-flap="C3"></span>
-        <span class="col col--status status--amber flap" data-flap="CHECKING" data-check="https://fairuz.timelesshub.my.id/"></span>
-      </a>
-    </section>
-
-    <p class="board-meta">
-      LAST CHECKED <span id="lastChecked">--:--:--</span>
-      <span class="dotsep">•</span> AUTO-REFRESH 60S
-    </p>
-
-    <!-- Info + contact panels -->
-    <section class="panels">
-      <article class="panel">
-        <div class="panel__tag">PASSENGER INFORMATION</div>
-        <p class="panel__lead">Hi, I'm Fairuz.</p>
-        <p>
-          I'm an Operations Specialist with a civil engineering background,
-          focused on bridging field execution and operational strategy through
-          process automation.
-        </p>
-        <p class="panel__muted">
-          I work with Python, Google Apps Script, CRM/ERP systems, and QA/QC
-          workflows to reduce bottlenecks, improve milestone visibility, and keep
-          high-volume operations moving.
-        </p>
+      <article class="ticket" data-href="https://fairuz.timelesshub.my.id/">
+        <div class="ticket__main">
+          <div class="route">
+            <div class="route__pt"><span class="route__k">FROM</span><span class="route__v">YOU</span></div>
+            <div class="route__arrow"></div>
+            <div class="route__pt route__pt--r"><span class="route__k">TO</span><span class="route__v route__v--to">PORTFOLIO</span></div>
+          </div>
+          <div class="grid">
+            <div><div class="cell__k">FLIGHT</div><div class="cell__v">TH·FZ</div></div>
+            <div><div class="cell__k">GATE</div><div class="cell__v">C3</div></div>
+            <div><div class="cell__k">BOARDS</div><div class="cell__v">03:39</div></div>
+            <div><div class="cell__k">STATUS</div><div class="cell__v green js-status">ON TIME</div></div>
+          </div>
+          <div class="barcode"></div>
+        </div>
+        <div class="perf"><span class="seam-grip" aria-hidden="true">⠿</span></div>
+        <div class="ticket__stub" tabindex="0" role="button" aria-label="Rip the stub off to board PORTFOLIO">
+          <div class="stub__lead">DESTINATION</div>
+          <div class="stub__dest">PORTFOLIO</div>
+          <div class="stub__row"><span class="stub__k">SEAT</span><span class="stub__v">3C</span></div>
+          <div class="stub__row"><span class="stub__k">BOARDS</span><span class="stub__v">03:39</span></div>
+          <div class="qr" aria-hidden="true"></div>
+          <div class="stub__scan">SCAN · BOARD</div>
+          <div class="stub__foot">⟺ RIP TO BOARD</div>
+        </div>
       </article>
 
-      <article class="panel panel--contact">
-        <div class="panel__tag">CONTACT DESK</div>
-        <ul class="desk">
-          <li>
-            <span class="desk__k">GITHUB</span>
-            <a class="desk__v" href="https://github.com/Fairuz-Afdhal" target="_blank" rel="noopener">→ github.com/Fairuz-Afdhal</a>
-          </li>
-          <li>
-            <span class="desk__k">EMAIL</span>
-            <a class="desk__v" href="mailto:fairuzzafdhal@gmail.com">→ fairuzzafdhal@gmail.com</a>
-          </li>
-          <li>
-            <span class="desk__k">DISCORD</span>
-            <a class="desk__v" href="https://discord.gg/Sv2WDNvbVU" target="_blank" rel="noopener">→ discord.gg/Sv2WDNvbVU</a>
-          </li>
-        </ul>
+      <article class="ticket" data-href="https://aio.timelesshub.my.id/">
+        <div class="ticket__main">
+          <div class="route">
+            <div class="route__pt"><span class="route__k">FROM</span><span class="route__v">YOU</span></div>
+            <div class="route__arrow"></div>
+            <div class="route__pt route__pt--r"><span class="route__k">TO</span><span class="route__v route__v--to">AIOSTREAMS</span></div>
+          </div>
+          <div class="grid">
+            <div><div class="cell__k">FLIGHT</div><div class="cell__v">TH·AIO</div></div>
+            <div><div class="cell__k">GATE</div><div class="cell__v">A1</div></div>
+            <div><div class="cell__k">BOARDS</div><div class="cell__v">09:41</div></div>
+            <div><div class="cell__k">STATUS</div><div class="cell__v green js-status">ON TIME</div></div>
+          </div>
+          <div class="barcode"></div>
+        </div>
+        <div class="perf"><span class="seam-grip" aria-hidden="true">⠿</span></div>
+        <div class="ticket__stub" tabindex="0" role="button" aria-label="Rip the stub off to board AIOSTREAMS">
+          <div class="stub__lead">DESTINATION</div>
+          <div class="stub__dest">AIOSTREAMS</div>
+          <div class="stub__row"><span class="stub__k">SEAT</span><span class="stub__v">1A</span></div>
+          <div class="stub__row"><span class="stub__k">BOARDS</span><span class="stub__v">09:41</span></div>
+          <div class="qr" aria-hidden="true"></div>
+          <div class="stub__scan">SCAN · BOARD</div>
+          <div class="stub__foot">⟺ RIP TO BOARD</div>
+        </div>
+      </article>
+
+      <article class="ticket" data-href="https://comet.timelesshub.my.id/">
+        <div class="ticket__main">
+          <div class="route">
+            <div class="route__pt"><span class="route__k">FROM</span><span class="route__v">YOU</span></div>
+            <div class="route__arrow"></div>
+            <div class="route__pt route__pt--r"><span class="route__k">TO</span><span class="route__v route__v--to">COMET</span></div>
+          </div>
+          <div class="grid">
+            <div><div class="cell__k">FLIGHT</div><div class="cell__v">TH·CMT</div></div>
+            <div><div class="cell__k">GATE</div><div class="cell__v">B2</div></div>
+            <div><div class="cell__k">BOARDS</div><div class="cell__v">13:37</div></div>
+            <div><div class="cell__k">STATUS</div><div class="cell__v green js-status">ON TIME</div></div>
+          </div>
+          <div class="barcode"></div>
+        </div>
+        <div class="perf"><span class="seam-grip" aria-hidden="true">⠿</span></div>
+        <div class="ticket__stub" tabindex="0" role="button" aria-label="Rip the stub off to board COMET">
+          <div class="stub__lead">DESTINATION</div>
+          <div class="stub__dest">COMET</div>
+          <div class="stub__row"><span class="stub__k">SEAT</span><span class="stub__v">2B</span></div>
+          <div class="stub__row"><span class="stub__k">BOARDS</span><span class="stub__v">13:37</span></div>
+          <div class="qr" aria-hidden="true"></div>
+          <div class="stub__scan">SCAN · BOARD</div>
+          <div class="stub__foot">⟺ RIP TO BOARD</div>
+        </div>
+      </article>
+
+    </div>
+
+    <section class="standby" aria-label="Upcoming routes">
+      <p class="standby__label">◇ STANDBY · NEW ROUTES PENDING DEPARTURE</p>
+
+      <article class="ticket ticket--standby" aria-disabled="true">
+        <div class="ticket__main">
+          <div class="route">
+            <div class="route__pt"><span class="route__k">FROM</span><span class="route__v">YOU</span></div>
+            <div class="route__arrow"></div>
+            <div class="route__pt route__pt--r"><span class="route__k">TO</span><span class="route__v route__v--to">AUTOMATION</span></div>
+          </div>
+          <div class="grid">
+            <div><div class="cell__k">FLIGHT</div><div class="cell__v">TH·N8N</div></div>
+            <div><div class="cell__k">GATE</div><div class="cell__v">—</div></div>
+            <div><div class="cell__k">BOARDS</div><div class="cell__v">SOON</div></div>
+            <div><div class="cell__k">STATUS</div><div class="cell__v amber">SCHEDULED</div></div>
+          </div>
+          <div class="barcode"></div>
+          <span class="standby__stamp">STANDBY</span>
+        </div>
+      </article>
+
+      <article class="ticket ticket--standby" aria-disabled="true">
+        <div class="ticket__main">
+          <div class="route">
+            <div class="route__pt"><span class="route__k">FROM</span><span class="route__v">YOU</span></div>
+            <div class="route__arrow"></div>
+            <div class="route__pt route__pt--r"><span class="route__k">TO</span><span class="route__v route__v--to">NEW ROUTE</span></div>
+          </div>
+          <div class="grid">
+            <div><div class="cell__k">FLIGHT</div><div class="cell__v">TH·???</div></div>
+            <div><div class="cell__k">GATE</div><div class="cell__v">—</div></div>
+            <div><div class="cell__k">BOARDS</div><div class="cell__v">TBA</div></div>
+            <div><div class="cell__k">STATUS</div><div class="cell__v amber">SCHEDULED</div></div>
+          </div>
+          <div class="barcode"></div>
+          <span class="standby__stamp">STANDBY</span>
+        </div>
       </article>
     </section>
-  </main>
+  </div>
 
-  <footer class="station-foot">
-    <span>TIMELESSHUB STATION</span>
-    <span class="dotsep">•</span>
-    <span>OPERATED BY FAIRUZ</span>
-    <span class="dotsep">•</span>
-    <span>© <span id="year"></span></span>
+  <footer class="gate" aria-label="Gate desk">
+    <div class="gate__row">
+      <div class="gate__agent">
+        <div class="gate__k">BOARDING AGENT</div>
+        <div class="gate__v">FAIRUZ AFDHAL</div>
+      </div>
+      <div class="gate__links">
+        <a href="mailto:fairuzzafdhal@gmail.com">EMAIL</a>
+        <a href="https://github.com/Fairuz-Afdhal" target="_blank" rel="noopener">GITHUB</a>
+        <a href="https://linkedin.com/in/fairuzafdhal/" target="_blank" rel="noopener">LINKEDIN</a>
+      </div>
+    </div>
+    <div class="gate__time">TIMELESSHUB AIRWAYS · STATION TIME <span class="clock" id="clock">--:--:--</span></div>
   </footer>
 
-  <!-- Boarding transition overlay -->
-  <div class="boarding" id="boarding" aria-hidden="true">
-    <div class="boarding__rails" aria-hidden="true"></div>
-    <div class="boarding__panel">
-      <p class="boarding__status"><span class="boarding__dot"></span> NOW BOARDING</p>
-      <div class="boarding__service flap" id="boardingService"></div>
-      <p class="boarding__dest" id="boardingDest"></p>
-      <div class="boarding__bar"><span></span></div>
-      <p class="boarding__hint">DEPARTING…</p>
-    </div>
-  </div>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-  <!-- Hidden station announcement (click the ◆ logo 5x) -->
-  <div class="pa" id="pa" role="status" aria-live="polite" aria-hidden="true">
-    <span class="pa__tag">◆ STATION ANNOUNCEMENT</span>
-    <span class="pa__text" id="paText"></span>
-  </div>
-
-  <script src="script.js"></script>
+  <script src="qrcode.js"></script>
+  <script src="ticket.js"></script>
 </body>
 </html>

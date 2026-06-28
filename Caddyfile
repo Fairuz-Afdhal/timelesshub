@@ -21,8 +21,8 @@
 
 # Homepage / hub (static site served from ./site)
 timelesshub.my.id {
-	root * /srv/timelesshub
 	encode zstd gzip
+	root * /srv/timelesshub
 	file_server
 	import shared_404
 	import static_cache
