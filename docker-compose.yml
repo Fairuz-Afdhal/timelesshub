@@ -3,9 +3,14 @@ services:
     image: g0ldyy/comet:latest
     container_name: comet
     restart: unless-stopped
+    volumes:
+      - comet_data:/app/data
     environment:
       - FASTAPI_HOST=0.0.0.0
       - FASTAPI_PORT=8000
+      - PUBLIC_BASE_URL=https://comet.timelesshub.my.id
+      - DATABASE_TYPE=sqlite
+      - DATABASE_PATH=data/comet.db
       # Torrentio
       - SCRAPE_TORRENTIO=live
       - TORRENTIO_URL=https://torrentio.strem.fun
@@ -15,6 +20,18 @@ services:
       - MEDIAFUSION_LIVE_SEARCH=True
       # Disable TorBox inside Comet to prevent the 429 error
       - SCRAPE_TORBOX=False
+      # Zilean - large hash/torrent cache
+      - SCRAPE_ZILEAN=live
+      - ZILEAN_URL=https://zileanfortheweebs.midnightignite.me
+      # Bitmagnet - additional torrent index
+      - SCRAPE_BITMAGNET=live
+      - BITMAGNET_URL=https://bitmagnetfortheweebs.midnightignite.me
+      # StremThru - extra source pool
+      - SCRAPE_STREMTHRU=live
+      - STREMTHRU_SCRAPE_URL=https://stremthru.13377001.xyz
+      # Simple free sources
+      - SCRAPE_PEERFLIX=live
+      - SCRAPE_TORRENTSDB=live
 
   aiostreams:
     image: ghcr.io/viren070/aiostreams:latest
@@ -47,3 +64,4 @@ volumes:
   caddy_data:
   caddy_config:
   aiostreams_data:
+  comet_data:
