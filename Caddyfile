@@ -39,7 +39,12 @@ fairuz.timelesshub.my.id {
 
 # Stremio addons (reverse-proxied to their containers)
 comet.timelesshub.my.id {
-	reverse_proxy comet:8000
+	reverse_proxy comet:8000 {
+		transport http {
+			response_header_timeout 60s
+			read_timeout 60s
+		}
+	}
 }
 
 aio.timelesshub.my.id {

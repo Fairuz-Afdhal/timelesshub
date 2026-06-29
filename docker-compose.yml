@@ -17,7 +17,7 @@ services:
       # MediaFusion
       - SCRAPE_MEDIAFUSION=live
       - MEDIAFUSION_URL=https://mediafusion.elfhosted.com
-      - MEDIAFUSION_LIVE_SEARCH=True
+      - MEDIAFUSION_LIVE_SEARCH=False
       # Disable TorBox inside Comet to prevent the 429 error
       - SCRAPE_TORBOX=False
       # Zilean - large hash/torrent cache
