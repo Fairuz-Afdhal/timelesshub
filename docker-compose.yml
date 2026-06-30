@@ -11,27 +11,21 @@ services:
       - PUBLIC_BASE_URL=https://comet.timelesshub.my.id
       - DATABASE_TYPE=sqlite
       - DATABASE_PATH=data/comet.db
-      # Torrentio
       - SCRAPE_TORRENTIO=live
       - TORRENTIO_URL=https://torrentio.strem.fun
-      # MediaFusion
-      - SCRAPE_MEDIAFUSION=live
-      - MEDIAFUSION_URL=https://mediafusion.elfhosted.com
-      - MEDIAFUSION_LIVE_SEARCH=False
-      # Disable TorBox inside Comet to prevent the 429 error
-      - SCRAPE_TORBOX=False
-      # Zilean - large hash/torrent cache
       - SCRAPE_ZILEAN=live
       - ZILEAN_URL=https://zileanfortheweebs.midnightignite.me
-      # Bitmagnet - additional torrent index
-      - SCRAPE_BITMAGNET=live
-      - BITMAGNET_URL=https://bitmagnetfortheweebs.midnightignite.me
-      # StremThru - extra source pool
       - SCRAPE_STREMTHRU=live
       - STREMTHRU_SCRAPE_URL=https://stremthru.13377001.xyz
-      # Simple free sources
-      - SCRAPE_PEERFLIX=live
+      - BACKGROUND_SCRAPER_ENABLED=False
+      - SCRAPE_MEDIAFUSION=live
+      - MEDIAFUSION_URL=https://mediafusion.elfhosted.com
+      - MEDIAFUSION_LIVE_SEARCH=True
+      - SCRAPE_BITMAGNET=live
+      - BITMAGNET_URL=https://bitmagnetfortheweebs.midnightignite.me
       - SCRAPE_TORRENTSDB=live
+      - SCRAPE_TORBOX=False
+      - SCRAPE_PEERFLIX=False
 
   aiostreams:
     image: ghcr.io/viren070/aiostreams:latest
@@ -40,6 +34,8 @@ services:
     environment:
       - SECRET_KEY=${AIOSTREAMS_SECRET_KEY}
       - BASE_URL=https://aio.timelesshub.my.id
+    volumes:
+      - aiostreams_data:/app/data 
 
   caddy:
     image: caddy:latest
@@ -58,7 +54,6 @@ services:
       - ./shared:/srv/shared:ro
       - caddy_data:/data
       - caddy_config:/config
-      - aiostreams_data:/app/data 
 
 volumes:
   caddy_data:
