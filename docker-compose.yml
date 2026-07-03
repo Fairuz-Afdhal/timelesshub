@@ -17,10 +17,9 @@ services:
       - ZILEAN_URL=https://zileanfortheweebs.midnightignite.me
       - SCRAPE_STREMTHRU=live
       - STREMTHRU_SCRAPE_URL=https://stremthru.13377001.xyz
-      - BACKGROUND_SCRAPER_ENABLED=False
       - SCRAPE_MEDIAFUSION=live
       - MEDIAFUSION_URL=https://mediafusion.elfhosted.com
-      - MEDIAFUSION_LIVE_SEARCH=True
+      - MEDIAFUSION_LIVE_SEARCH=False
       - SCRAPE_BITMAGNET=live
       - BITMAGNET_URL=https://bitmagnetfortheweebs.midnightignite.me
       - SCRAPE_TORRENTSDB=live
@@ -34,6 +33,8 @@ services:
     environment:
       - SECRET_KEY=${AIOSTREAMS_SECRET_KEY}
       - BASE_URL=https://aio.timelesshub.my.id
+      - DATABASE_URI=sqlite://./data/db.sqlite
+      - AIOSTREAMS_AUTH=${AIOSTREAMS_AUTH}
     volumes:
       - aiostreams_data:/app/data 
 
