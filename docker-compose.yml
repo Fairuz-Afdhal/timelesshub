@@ -25,6 +25,8 @@ services:
       - SCRAPE_TORRENTSDB=live
       - SCRAPE_TORBOX=False
       - SCRAPE_PEERFLIX=False
+    networks:
+      - caddy_proxy
 
   aiostreams:
     image: ghcr.io/viren070/aiostreams:latest
@@ -36,28 +38,14 @@ services:
       - DATABASE_URI=sqlite://./data/db.sqlite
       - AIOSTREAMS_AUTH=${AIOSTREAMS_AUTH}
     volumes:
-      - aiostreams_data:/app/data 
-
-  caddy:
-    image: caddy:latest
-    container_name: caddy
-    restart: unless-stopped
-    dns:
-      - 1.1.1.1
-      - 8.8.8.8
-    ports:
-      - "80:80"
-      - "443:443"
-    volumes:
-      - ./Caddyfile:/etc/caddy/Caddyfile
-      - ./site:/srv/timelesshub:ro
-      - ./portfolio:/srv/fairuz:ro
-      - ./shared:/srv/shared:ro
-      - caddy_data:/data
-      - caddy_config:/config
+      - aiostreams_data:/app/data
+    networks:
+      - caddy_proxy
 
 volumes:
-  caddy_data:
-  caddy_config:
   aiostreams_data:
   comet_data:
+
+networks:
+  caddy_proxy:
+    external: true
